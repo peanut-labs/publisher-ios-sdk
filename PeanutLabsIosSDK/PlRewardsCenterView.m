@@ -18,6 +18,14 @@
         CGRect screenRect = [[UIScreen mainScreen] bounds];
         CGFloat height = screenRect.size.height;
         CGFloat width = screenRect.size.width;
+        
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+        if ((NSFoundationVersionNumber <= NSFoundationVersionNumber_iOS_7_1) && UIDeviceOrientationIsLandscape(orientation)) {
+            CGFloat t = width;
+            width = height;
+            height = t;
+        }
+        
         [self buildContainerViewWithWidth:width andHeight:height];
         
         if (self.baseUrl) {
