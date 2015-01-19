@@ -20,7 +20,7 @@
         CGFloat width = screenRect.size.width;
         
         UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-        if ((NSFoundationVersionNumber <= NSFoundationVersionNumber_iOS_7_1) && UIDeviceOrientationIsLandscape(orientation)) {
+        if (SYSTEM_VERSION_LESS_THAN(@"8.0") && UIDeviceOrientationIsLandscape(orientation)) {
             CGFloat t = width;
             width = height;
             height = t;
