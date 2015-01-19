@@ -59,7 +59,11 @@ static PeanutLabsManager *_plManagerInstance;
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     
     PlRewardsCenterViewController *rewardsCenter = [[PlRewardsCenterViewController alloc] init];
-    [rootViewController presentViewController:rewardsCenter animated:YES completion:nil];
+    if ([rootViewController presentedViewController] == nil) {
+        [rootViewController presentViewController:rewardsCenter animated:YES completion:nil];
+    } else {
+        [[rootViewController presentedViewController] presentViewController:rewardsCenter animated:YES completion:nil];
+    }
     rewardsCenter.delegate = self;
     
     if (self.delegate) { //make sure its implemented
