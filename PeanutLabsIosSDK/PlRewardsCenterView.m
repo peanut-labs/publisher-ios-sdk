@@ -6,7 +6,7 @@
 //
 
 #import "PlRewardsCenterView.h"
-#import <QuartzCore/QuartzCore.h>
+#import "PlUtils.h"
 
 
 @implementation PlRewardsCenterView
@@ -62,7 +62,7 @@
     @return UIWebView
  */
 - (UIWebView *)buildIframeWebView:(float)y width:(float)width height:(float)height {
-    self.iframeView = [[UIWebView alloc] initWithFrame:CGRectMake(0, y, width, height)];
+    self.iframeView = [[UIWebView alloc] initWithFrame:CGRectMake(0, y, width, height - y)];
     self.iframeView.userInteractionEnabled = YES;
     self.iframeView.delegate = self;
     
