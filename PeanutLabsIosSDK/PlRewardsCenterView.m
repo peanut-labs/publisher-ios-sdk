@@ -56,7 +56,7 @@
     
     //Overlay
     self.overlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
-    self.overlay.backgroundColor = [UIColor grayColor];
+    self.overlay.backgroundColor = [UIColor whiteColor];
     self.overlay.opaque = YES;
     self.overlay.alpha = 0.4;
 }
