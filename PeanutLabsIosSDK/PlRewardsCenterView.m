@@ -53,6 +53,12 @@
     [self.containerView addSubview:[self buildNavBarWithY:0 width:width height:navBarHeight]];
     [self setupNavBarButtons];
     [self.containerView addSubview:[self buildIframeWebView:navBarHeight width:width height:height]];
+    
+    //Overlay
+    self.overlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
+    self.overlay.backgroundColor = [UIColor grayColor];
+    self.overlay.opaque = YES;
+    self.overlay.alpha = 0.4;
 }
 
 
@@ -145,6 +151,7 @@
     
     //Toolbar
     self.toolbarTitle = [[UIBarButtonItem alloc] initWithCustomView:self.toolbarTitleLabel];
+    
 }
 
 
@@ -160,11 +167,13 @@
         [self.containerView addSubview: self.activityIndicator];
     }
     [self.activityIndicator startAnimating];
+    [self.containerView addSubview:self.overlay];
 }
 
 
 - (void)hideLoadingIndicator {
     [self.activityIndicator stopAnimating];
+    [self.overlay removeFromSuperview];
 }
 
 
