@@ -30,6 +30,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *toolbarTitleLabel;
 @property (strong, nonatomic) IBOutlet UIWebView *iframeView;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (strong, nonatomic) IBOutlet UIView *overlay;
 
 @property (strong, nonatomic) id<PlRewardsCenterDelegate> delegate;
 
