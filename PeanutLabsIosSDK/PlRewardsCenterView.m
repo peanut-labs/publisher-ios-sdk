@@ -186,8 +186,14 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     NSString *host = [self.iframeView.request.URL host];
-    if ([host isEqualToString:@"www.peanutlabs.com"] || [host isEqualToString:@"peanutlabs.com"]) {
-        self.navBar.items = [NSArray arrayWithObjects:self.doneButton, self.flex, self.toolbarTitle, self.flex, nil];
+    if ([host rangeOfString:@"peanutlabs.com" options:NSRegularExpressionSearch].location != NSNotFound) {
+        NSString *path = [self.iframeView.request.URL path];
+        if ([path rangeOfString:@"landingPage.php" options:NSRegularExpressionSearch].location != NSNotFound) {
+            self.navBar.items = [NSArray arrayWithObjects:self.flex, self.toolbarTitle, self.flex, self.rewardsCenterButton, nil];
+        } else {
+            self.navBar.items = [NSArray arrayWithObjects:self.doneButton, self.flex, self.toolbarTitle, self.flex, nil];
+        }
+        
     } else {
         self.navBar.items = [NSArray arrayWithObjects:self.backButton, self.forwardButton, self.flex, self.toolbarTitle, self.flex, self.rewardsCenterButton, nil];
     }
