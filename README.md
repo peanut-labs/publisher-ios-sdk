@@ -18,3 +18,7 @@ Check out <a href="http://peanut-labs.github.io/publisher-doc/" target="_blank">
 <b>Note:</b> We currently only support iPad applications, but will be supporting applications on other iOS devices soon.
 
 #Changelog
+
+v0.2
+- Always generate new user Id if the user switches account
+- Support for all orientations on the iPhone
