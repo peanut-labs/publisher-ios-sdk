@@ -52,9 +52,7 @@ static PeanutLabsManager *_plManagerInstance;
 
 
 - (void)openRewardsCenter {
-    if (self.userId == nil) {
-        self.userId = [self generateUserId];
-    }
+    self.userId = [self generateUserId];
     
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     
