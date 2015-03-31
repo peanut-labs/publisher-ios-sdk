@@ -11,6 +11,43 @@
 
 @implementation PlRewardsCenterView
 
+- (void)resizeRewardsCenterView {
+    CGRect oldFrame;
+    CGRect newFrame;
+    
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat height = screenRect.size.height;
+    CGFloat width = screenRect.size.width;
+    
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0") && UIDeviceOrientationIsLandscape(orientation)) {
+        CGFloat t = width;
+        width = height;
+        height = t;
+    }
+    
+    oldFrame = self.containerView.frame;
+    newFrame = CGRectMake(oldFrame.origin.x, oldFrame.origin.y, width, height);
+    [self.containerView setFrame:newFrame];
+    
+    oldFrame = self.overlay.frame;
+    newFrame = CGRectMake(oldFrame.origin.x, oldFrame.origin.y, width, height);
+    [self.overlay setFrame:newFrame];
+    
+    if (self.activityIndicator != nil) {
+        self.activityIndicator.center = CGPointMake(width / 2.0, height / 2.0);
+    }
+    
+    float navBarHeight = 44.0;
+    oldFrame = self.navBar.frame;
+    newFrame =CGRectMake(oldFrame.origin.x, oldFrame.origin.y, width, navBarHeight);
+    [self.navBar setFrame:newFrame];
+
+    oldFrame = self.iframeView.frame;
+    newFrame = CGRectMake(oldFrame.origin.x, oldFrame.origin.y, width, height - navBarHeight);
+    [self.iframeView setFrame:newFrame];
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
 
@@ -105,7 +142,7 @@
 
 - (void)setupNavBarButtons {
     //Done Button
-    self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:nil action:nil];
+    self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.doneButton.enabled = YES;
     self.doneButton.imageInsets = UIEdgeInsetsZero;
     self.doneButton.style = UIBarButtonItemStylePlain;
@@ -134,6 +171,7 @@
     [backToolbar setTransform:CGAffineTransformMakeScale(-1, 1)];
     backToolbar.items = [NSArray arrayWithObjects:backItem, nil];
     backToolbar.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
+    backToolbar.clipsToBounds = YES;
     
     self.backButton = [[UIBarButtonItem alloc] initWithCustomView:backToolbar];
     self.backButton.enabled = YES;
@@ -186,17 +224,18 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     NSString *host = [self.iframeView.request.URL host];
-    if ([host rangeOfString:@"peanutlabs.com" options:NSRegularExpressionSearch].location != NSNotFound) {
-        NSString *path = [self.iframeView.request.URL path];
-        if ([path rangeOfString:@"landingPage.php" options:NSRegularExpressionSearch].location != NSNotFound) {
-            self.navBar.items = [NSArray arrayWithObjects:self.flex, self.toolbarTitle, self.flex, self.rewardsCenterButton, nil];
-        } else {
+    NSString *path = [self.iframeView.request.URL path];
+    if ([host isEqualToString:@"www.peanutlabs.com"] || [host isEqualToString:@"peanutlabs.com"]) {
+        if ([path isEqualToString:@"/userGreeting.php"]) {
             self.navBar.items = [NSArray arrayWithObjects:self.doneButton, self.flex, self.toolbarTitle, self.flex, nil];
+        } else {
+            self.navBar.items = [NSArray arrayWithObjects:self.flex, self.toolbarTitle, self.flex, self.rewardsCenterButton, nil];
         }
-        
-    } else {
+    }
+    else {
         self.navBar.items = [NSArray arrayWithObjects:self.backButton, self.forwardButton, self.flex, self.toolbarTitle, self.flex, self.rewardsCenterButton, nil];
     }
+
     
     [self.backButton setEnabled:[self.iframeView canGoBack]];
     [self.forwardButton setEnabled:[self.iframeView canGoForward]];

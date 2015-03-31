@@ -30,6 +30,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+        selector: @selector(orientationDidChange:)
+         name: UIApplicationDidChangeStatusBarOrientationNotification
+           object: nil];
+    
+}
+
+- (void) orientationDidChange: (NSNotification *) note
+{
+    [self.plWebView resizeRewardsCenterView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,13 +48,13 @@
 
 
 - (BOOL)shouldAutorotate {
-    return NO;
+    return YES;
 }
 
 
 - (void)PlRewardsCenter:(PlRewardsCenterView *)plRewardsCenter donePushed:(id)sender {
     [self.delegate closeRewardsCenter];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 
@@ -55,13 +65,11 @@
     return YES;
 }
 
-
 -(NSUInteger)supportedInterfaceOrientations {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+    if (IS_PHONE_DEVICE()) {
         return UIInterfaceOrientationMaskPortrait;
-    } else {
-        return UIInterfaceOrientationMaskAll;
     }
+    return UIInterfaceOrientationMaskAll;
 }
 
 @end

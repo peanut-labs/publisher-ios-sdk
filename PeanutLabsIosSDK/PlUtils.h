@@ -22,6 +22,7 @@
 
 #define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
+#define IS_PHONE_DEVICE() UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone
 
 @interface PlUtils : NSObject
 

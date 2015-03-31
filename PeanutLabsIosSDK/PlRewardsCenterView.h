@@ -36,5 +36,6 @@
 
 - (UIToolbar *)buildNavBarWithY:(float)y width:(float)width height:(float)height;
 - (void)setupNavBarButtons;
+- (void)resizeRewardsCenterView;
 
 @end
