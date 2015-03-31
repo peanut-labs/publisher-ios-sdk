@@ -15,8 +15,6 @@ All of this and much more is configured  and monitored through our Publisher Das
 
 Check out <a href="http://peanut-labs.github.io/publisher-doc/" target="_blank">our integration guide</a> for step by step instructions on getting up and running with our Reward Center within your iOS application.
 
-<b>Note:</b> We currently only support iPad applications, but will be supporting applications on other iOS devices soon.
-
 #Changelog
 
 v0.2
