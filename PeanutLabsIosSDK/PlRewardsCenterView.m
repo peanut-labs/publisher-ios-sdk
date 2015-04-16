@@ -48,6 +48,7 @@
     [self.iframeView setFrame:newFrame];
 }
 
+
 - (void)layoutSubviews {
     [super layoutSubviews];
 
@@ -205,7 +206,7 @@
         [self.containerView addSubview: self.activityIndicator];
     }
     [self.activityIndicator startAnimating];
-    [self.containerView addSubview:self.overlay];
+    [self.iframeView addSubview:self.overlay];
 }
 
 
@@ -231,8 +232,7 @@
         } else {
             self.navBar.items = [NSArray arrayWithObjects:self.flex, self.toolbarTitle, self.flex, self.rewardsCenterButton, nil];
         }
-    }
-    else {
+    } else {
         self.navBar.items = [NSArray arrayWithObjects:self.backButton, self.forwardButton, self.flex, self.toolbarTitle, self.flex, self.rewardsCenterButton, nil];
     }
 
@@ -246,9 +246,6 @@
 
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Connectivity Error" message:@"Please ensure you are connected to the internet" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
-    
     self.navBar.items = [NSArray arrayWithObjects:self.doneButton, self.flex, self.toolbarTitle, self.flex, nil];
     [self hideLoadingIndicator];
 }

@@ -17,6 +17,10 @@ Check out <a href="http://peanut-labs.github.io/publisher-doc/" target="_blank">
 
 #Changelog
 
+v0.3
+- Activity Indicator does not cover the toolbar anymore
+- Fixing the frequent connectivity error issue
+
 v0.2
 - Always generate new user Id if the user switches account
 - Support for all orientations on the iPhone
