@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "PlRewardsCenterViewController.h"
+#import "PlUtils.h"
 
 @class PeanutLabsManager;
 
@@ -23,11 +24,15 @@
 @property NSString *appKey;
 @property NSString *endUserId;
 @property NSString *userId;
+@property NSString *dob;
+@property NSString *sex;
 
 + (PeanutLabsManager*)getInstance;
 
 - (void)openRewardsCenter;
 - (NSString *)generateUserId;
+- (void)addCustomParameter: (NSString *)key value:(NSString *) value;
+- (NSMutableDictionary *)getCustomVars;
 
 @property (strong, nonatomic) id<PeanutLabsManagerDelegate> delegate;
 

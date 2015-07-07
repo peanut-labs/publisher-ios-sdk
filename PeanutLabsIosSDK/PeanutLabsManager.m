@@ -9,15 +9,17 @@
 #import "PlRewardsCenterViewController.h"
 #import <CommonCrypto/CommonDigest.h>
 
+
 @implementation PeanutLabsManager
 
 static PeanutLabsManager *_plManagerInstance;
-
+NSMutableDictionary *_customVars;
 
 #pragma mark - getInstance
 + (PeanutLabsManager *)getInstance {
     if (!_plManagerInstance) {
         _plManagerInstance = [[PeanutLabsManager alloc] init];
+        _customVars = [[NSMutableDictionary alloc] init];
     }
     return _plManagerInstance;
 }
@@ -80,6 +82,14 @@ static PeanutLabsManager *_plManagerInstance;
         }
     }
     self.userId = nil;
+}
+
+- (void)addCustomParameter: (NSString *)key value:(NSString *) value {
+    [_customVars setObject:value forKey: key];
+}
+
+- (NSMutableDictionary *)getCustomVars {
+    return _customVars;
 }
 
 @end

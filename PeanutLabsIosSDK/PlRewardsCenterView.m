@@ -143,14 +143,15 @@
 
 - (void)setupNavBarButtons {
     //Done Button
-    self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Exit" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.doneButton.enabled = YES;
     self.doneButton.imageInsets = UIEdgeInsetsZero;
     self.doneButton.style = UIBarButtonItemStylePlain;
     self.doneButton.action = @selector(doneButtonPushed:);
     
+    
     //Rewards Center Button
-    self.rewardsCenterButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:nil action:nil];
+    self.rewardsCenterButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.rewardsCenterButton.enabled = YES;
     self.rewardsCenterButton.imageInsets = UIEdgeInsetsZero;
     self.rewardsCenterButton.style = UIBarButtonItemStylePlain;
@@ -228,7 +229,7 @@
     NSString *path = [self.iframeView.request.URL path];
     if ([host isEqualToString:@"www.peanutlabs.com"] || [host isEqualToString:@"peanutlabs.com"]) {
         if ([path isEqualToString:@"/userGreeting.php"]) {
-            self.navBar.items = [NSArray arrayWithObjects:self.doneButton, self.flex, self.toolbarTitle, self.flex, nil];
+            self.navBar.items = [NSArray arrayWithObjects:self.flex, self.toolbarTitle, self.flex, self.doneButton, nil];
         } else {
             self.navBar.items = [NSArray arrayWithObjects:self.flex, self.toolbarTitle, self.flex, self.rewardsCenterButton, nil];
         }
