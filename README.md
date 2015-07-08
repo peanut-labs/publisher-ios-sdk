@@ -17,6 +17,12 @@ Check out <a href="http://peanut-labs.github.io/publisher-doc/" target="_blank">
 
 #Changelog
 
+v0.4
+- Small UI changes for button placement
+- Supports custom url parameters
+- Supports date of birth url parameter
+- Supports gender url parameter
+
 v0.3
 - Activity Indicator does not cover the toolbar anymore
 - Fixing the frequent connectivity error issue
