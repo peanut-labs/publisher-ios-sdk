@@ -18,10 +18,13 @@ Check out <a href="http://peanut-labs.github.io/publisher-doc/" target="_blank">
 #Changelog
 
 v0.4
-- Small UI changes for button placement
+- Changed "Done" button to "Home" button and replaced into right side
+- Replaced "X" button to "Exit" and moved it to the right side
+- After done with survey "Done" button led back to the application, changed it into lead back to rewards center
 - Supports custom url parameters
 - Supports date of birth url parameter
 - Supports gender url parameter
+- Automatically sets locale for rewards center depends on device locale
 
 v0.3
 - Activity Indicator does not cover the toolbar anymore
