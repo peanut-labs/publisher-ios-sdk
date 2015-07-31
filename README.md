@@ -33,3 +33,32 @@ v0.3
 v0.2
 - Always generate new user Id if the user switches account
 - Support for all orientations on the iPhone
+
+*	Open Rewards Center.
+
+``` Objective-c
+Open Rewards Center with User Id
+[plManager setAppId:1111];
+[plManager setAppKey:@"APP_KEY_HERE"];
+[plManager setEndUserId:@"END_USER_ID_HERE"];
+
+```
+
+* Add dob and gender as a parameter
+
+``` Objective-c
+Setting gender // 1(male) or 2(female)
+[plManager setSex: @"1"];
+
+Setting Dob // MM-DD-YYYY
+[plManager setDob: @"11-09-1999"];
+
+```
+
+``` Objective-c
+First parameter should be var_key and second parameter should be var_val
+
+[plManager addCustomParameter:@"firstName" value:@"Bilguun"];
+[plManager addCustomParameter:@"lastName" value:@"Oyunchimeg"];
+
+```
