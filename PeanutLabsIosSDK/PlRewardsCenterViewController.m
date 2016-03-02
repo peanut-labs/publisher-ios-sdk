@@ -37,7 +37,7 @@
     
     // injecting sex into url
     if ([manager sex]) {
-        pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[0-1]$"];
+        pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[1-2]$"];
         
         if ([pred evaluateWithObject:[manager sex]]) {
             url = [url stringByAppendingFormat:@"%@%@", @"&sex=", [manager sex]];
@@ -111,9 +111,6 @@
 }
 
 -(NSUInteger)supportedInterfaceOrientations {
-    if (IS_PHONE_DEVICE()) {
-        return UIInterfaceOrientationMaskPortrait;
-    }
     return UIInterfaceOrientationMaskAll;
 }
 
