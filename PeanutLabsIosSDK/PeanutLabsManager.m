@@ -92,4 +92,8 @@ NSMutableDictionary *_customVars;
     return _customVars;
 }
 
+- (void) clearCustomParameters {
+    _customVars = [[NSMutableDictionary alloc] init];
+}
+
 @end

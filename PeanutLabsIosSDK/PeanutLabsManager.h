@@ -26,6 +26,7 @@
 @property NSString *userId;
 @property NSString *dob;
 @property NSString *sex;
+@property NSString *publisherName;
 
 + (PeanutLabsManager*)getInstance;
 
@@ -33,6 +34,7 @@
 - (NSString *)generateUserId;
 - (void)addCustomParameter: (NSString *)key value:(NSString *) value;
 - (NSMutableDictionary *)getCustomVars;
+- (void) clearCustomParameters;
 
 @property (strong, nonatomic) id<PeanutLabsManagerDelegate> delegate;
 

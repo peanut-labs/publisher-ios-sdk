@@ -22,7 +22,7 @@
     PeanutLabsManager *manager = [PeanutLabsManager getInstance];
     
     NSString *userId = [manager userId];
-    NSString *url = [[NSString alloc] initWithFormat:@"%@%@", @"https://www.peanutlabs.com/userGreeting.php?userId=", userId];
+    NSString *url = [[NSString alloc] initWithFormat:@"%@%@%@", @"http://www.peanutlabs.com/userGreeting.php?userId=", userId, @"&mobile_sdk=true&ref=ios_sdk"];
     NSPredicate *pred = nil;
     
     // injecting dob into url
@@ -79,7 +79,6 @@
         selector: @selector(orientationDidChange:)
          name: UIApplicationDidChangeStatusBarOrientationNotification
            object: nil];
-    
 }
 
 - (void) orientationDidChange: (NSNotification *) note

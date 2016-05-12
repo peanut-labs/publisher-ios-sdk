@@ -7,9 +7,12 @@
 
 #import "PlRewardsCenterView.h"
 #import "PlUtils.h"
+#import "Router.h"
 
 
-@implementation PlRewardsCenterView
+@implementation PlRewardsCenterView  {
+    NSString *fragment;
+}
 
 - (void)resizeRewardsCenterView {
     CGRect oldFrame;
@@ -39,6 +42,7 @@
     }
     
     float navBarHeight = 44.0;
+    
     oldFrame = self.navBar.frame;
     newFrame =CGRectMake(oldFrame.origin.x, oldFrame.origin.y, width, navBarHeight);
     [self.navBar setFrame:newFrame];
@@ -136,26 +140,26 @@
     self.navBar.hidden = NO;
     self.navBar.multipleTouchEnabled = NO;
     self.navBar.tag = 0;
+    self.navBar.backgroundColor = [UIColor whiteColor];
     
     return self.navBar;
 }
 
 
 - (void)setupNavBarButtons {
+    
     //Done Button
-    self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Exit" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:@selector(doneButtonPushed:)];
     self.doneButton.enabled = YES;
     self.doneButton.imageInsets = UIEdgeInsetsZero;
-    self.doneButton.style = UIBarButtonItemStylePlain;
-    self.doneButton.action = @selector(doneButtonPushed:);
     
+    //Arrow that return you back to main app
+    self.arrowButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:105 target:nil action:@selector(doneButtonPushed:)];
+    self.arrowButton.enabled = YES;
     
     //Rewards Center Button
-    self.rewardsCenterButton = [[UIBarButtonItem alloc] initWithTitle:@"Home" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.rewardsCenterButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop target:nil action:@selector(backToRewardsCenter:)];
     self.rewardsCenterButton.enabled = YES;
-    self.rewardsCenterButton.imageInsets = UIEdgeInsetsZero;
-    self.rewardsCenterButton.style = UIBarButtonItemStylePlain;
-    self.rewardsCenterButton.action = @selector(backToRewardsCenter:);
     
     //Flexible Space
     self.flex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
@@ -165,29 +169,27 @@
     self.flex.tag = 0;
     self.flex.width = 0.0;
     
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(goBack:)];
-    backItem.imageInsets = UIEdgeInsetsZero;
+    //Fixed Space
+    self.fixed = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    self.fixed.width = 16.0f;
     
-    UIToolbar *backToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    backToolbar.userInteractionEnabled = YES;
-    [backToolbar setTransform:CGAffineTransformMakeScale(-1, 1)];
-    backToolbar.items = [NSArray arrayWithObjects:backItem, nil];
-    backToolbar.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
-    backToolbar.clipsToBounds = YES;
-    
-    self.backButton = [[UIBarButtonItem alloc] initWithCustomView:backToolbar];
+    //Back button for the webview
+    self.backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:105 target:nil action:@selector(goBack:)];
     self.backButton.enabled = YES;
-    self.backButton.imageInsets = UIEdgeInsetsZero;
     
     //Forward button for the webview
-    self.forwardButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(goForward:)];
+    self.forwardButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:106 target:self action:@selector(goForward:)];
     self.forwardButton.enabled = YES;
     self.forwardButton.imageInsets = UIEdgeInsetsZero;
    
     
     //Toolbar title
-    self.toolbarTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 23)];
+    self.toolbarTitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.toolbarTitleLabel.text = @"Peanut Labs";
+    [self.toolbarTitleLabel sizeToFit];
+    self.toolbarTitleLabel.backgroundColor = [UIColor clearColor];
+    self.toolbarTitleLabel.textColor = [UIColor blackColor];
+    self.toolbarTitleLabel.textAlignment = NSTextAlignmentCenter;
     
     //Toolbar
     self.toolbarTitle = [[UIBarButtonItem alloc] initWithCustomView:self.toolbarTitleLabel];
@@ -219,6 +221,41 @@
 
 #pragma mark - Delegate Methods
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    
+    NSArray *fragments = [NSArray arrayWithObjects:@"offer", @"survey", @"open", nil];
+
+    if ([request.URL.host isEqualToString:@"www.peanutlabs.com"] || [request.URL.host isEqualToString:@"peanutlabs.com"]) {
+        if ([fragments containsObject:[request.URL fragment]]) {
+
+            fragment = [request.URL fragment] ;
+            [self updateNavBarHeight:YES];
+
+            return NO;
+        } else if ([[request.URL fragment] isEqualToString:@"close"]) {
+            
+            fragment = nil;
+            [self updateNavBarHeight:NO];
+            
+            return NO;
+        } else if ([[request.URL.path lastPathComponent] isEqualToString:@"landingPage.php"]) {
+            
+            [self updateNavBarHeight:YES];
+        } else if ([request.URL.path isEqualToString:@"/userGreeting.php"]) {
+        
+            NSArray *urlComponents = [request.URL.query componentsSeparatedByString:@"&"];
+            
+            if (![urlComponents containsObject:@"mobile_sdk=true"]) {
+                [self updateNavBarHeight:NO];
+                
+                NSURL *url = [NSURL URLWithString:self.baseUrl];
+                NSURLRequest* request = [NSURLRequest requestWithURL:url];
+                [self.iframeView loadRequest:request];
+                
+                return NO;
+            }
+        }
+    }
+    
     [self showLoadingIndicator];
     return YES;
 }
@@ -227,16 +264,31 @@
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     NSString *host = [self.iframeView.request.URL host];
     NSString *path = [self.iframeView.request.URL path];
+    NSString *title = @"Peanut Labs";
+    
+    if ([fragment isEqualToString:@"offer"] || [fragment isEqualToString:@"survey"]) {
+        title = [fragment capitalizedString];
+    }
+    
+    self.toolbarTitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.toolbarTitleLabel.backgroundColor = [UIColor clearColor];
+    self.toolbarTitleLabel.textColor = [UIColor blackColor];
+    self.toolbarTitleLabel.textAlignment = NSTextAlignmentCenter;
+    self.toolbarTitleLabel.text = title;
+    [self.toolbarTitleLabel sizeToFit];
+    
+    self.toolbarTitle = [[UIBarButtonItem alloc] initWithCustomView:self.toolbarTitleLabel];
+
     if ([host isEqualToString:@"www.peanutlabs.com"] || [host isEqualToString:@"peanutlabs.com"]) {
         if ([path isEqualToString:@"/userGreeting.php"]) {
-            self.navBar.items = [NSArray arrayWithObjects:self.flex, self.toolbarTitle, self.flex, self.doneButton, nil];
+            self.navBar.items = [NSArray arrayWithObjects: self.arrowButton, self.doneButton, nil];
         } else {
             self.navBar.items = [NSArray arrayWithObjects:self.flex, self.toolbarTitle, self.flex, self.rewardsCenterButton, nil];
         }
     } else {
-        self.navBar.items = [NSArray arrayWithObjects:self.backButton, self.forwardButton, self.flex, self.toolbarTitle, self.flex, self.rewardsCenterButton, nil];
+        [self updateNavBarHeight:NO];
+        self.navBar.items = [NSArray arrayWithObjects:self.backButton, self.fixed, self.forwardButton, self.flex, self.toolbarTitle, self.flex, self.rewardsCenterButton, nil];
     }
-
     
     [self.backButton setEnabled:[self.iframeView canGoBack]];
     [self.forwardButton setEnabled:[self.iframeView canGoForward]];
@@ -244,14 +296,25 @@
     [self hideLoadingIndicator];
 }
 
-
-
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-    self.navBar.items = [NSArray arrayWithObjects:self.doneButton, self.flex, self.toolbarTitle, self.flex, nil];
+    self.navBar.items = [NSArray arrayWithObjects: self.arrowButton, self.doneButton, nil];
     [self hideLoadingIndicator];
 }
 
+- (void)updateNavBarHeight: (BOOL) hide {
 
+    CGRect frame = CGRectNull;
+    float navBarHeight = 0;
+    if (hide) {
+        frame = CGRectMake(0, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
+    } else {
+        navBarHeight = 44.0;
+        frame = CGRectMake(0, 44.0, self.frame.size.width, self.frame.size.height);
+    }
+    
+    self.navBar.frame = CGRectMake(0, 0, self.frame.size.width, navBarHeight);
+    self.iframeView.frame = frame;
+}
 
 #pragma mark - Actions
 - (IBAction)doneButtonPushed:(id)sender {

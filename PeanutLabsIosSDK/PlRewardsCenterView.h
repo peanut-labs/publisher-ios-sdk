@@ -22,8 +22,10 @@
 @property (strong, nonatomic) IBOutlet UIView *containerView;
 @property (strong, nonatomic) IBOutlet UIToolbar *navBar;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *doneButton;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *arrowButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *rewardsCenterButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *flex;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *fixed;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *toolbarTitle;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *backButton;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *forwardButton;
