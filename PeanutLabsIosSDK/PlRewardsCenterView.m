@@ -7,7 +7,6 @@
 
 #import "PlRewardsCenterView.h"
 #import "PlUtils.h"
-#import "Router.h"
 
 
 @implementation PlRewardsCenterView  {
@@ -231,7 +230,7 @@
             [self updateNavBarHeight:YES];
 
             return NO;
-        } else if ([[request.URL fragment] isEqualToString:@"close"]) {
+        } else if ([[request.URL fragment] isEqualToString:@"close"] || [[request.URL fragment] isEqualToString:@""]) {
             
             fragment = nil;
             [self updateNavBarHeight:NO];
