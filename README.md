@@ -16,6 +16,12 @@ All of this and much more is configured  and monitored through our Publisher Das
 Check out <a href="http://peanut-labs.github.io/publisher-doc/" target="_blank">our integration guide</a> for step by step instructions on getting up and running with our Reward Center within your iOS application.
 
 #Changelog
+v0.5
+- Updated iOS SDK bar behavior
+  1. Hide sdk bar for profiler modal
+  2. Hide sdk bar for pre-screener modal
+  3. Hide sdk bar for survey landing page
+  4. 'Back' button for main reward center page sdk bar update
 
 v0.4
 - Changed "Done" button to "Home" button and replaced into right side
