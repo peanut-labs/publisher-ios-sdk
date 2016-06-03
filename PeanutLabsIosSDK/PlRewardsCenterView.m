@@ -246,7 +246,15 @@
             if (![urlComponents containsObject:@"mobile_sdk=true"]) {
                 [self updateNavBarHeight:NO];
                 
+                NSLocale *locale = [NSLocale currentLocale];
+                NSString *cc = [locale objectForKey:NSLocaleLanguageCode];
+                NSString *zl_locale = [NSString stringWithFormat:@"%@%@", @"zl=", cc];
                 NSURL *url = [NSURL URLWithString:self.baseUrl];
+                
+                if (![urlComponents containsObject:zl_locale]) {
+                    url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",request.URL, @"&mobile_sdk=true&ref=ios_sdk"]];
+                }
+                
                 NSURLRequest* request = [NSURLRequest requestWithURL:url];
                 [self.iframeView loadRequest:request];
                 
