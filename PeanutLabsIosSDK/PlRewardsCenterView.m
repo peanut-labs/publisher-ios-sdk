@@ -43,7 +43,7 @@
     float navBarHeight = 44.0;
     
     oldFrame = self.navBar.frame;
-    newFrame =CGRectMake(oldFrame.origin.x, oldFrame.origin.y, width, navBarHeight);
+    newFrame = CGRectMake(oldFrame.origin.x, oldFrame.origin.y, width, navBarHeight);
     [self.navBar setFrame:newFrame];
 
     oldFrame = self.iframeView.frame;
@@ -140,6 +140,7 @@
     self.navBar.multipleTouchEnabled = NO;
     self.navBar.tag = 0;
     self.navBar.backgroundColor = [UIColor whiteColor];
+    self.navBar.translucent = true;
     
     return self.navBar;
 }
@@ -255,6 +256,7 @@
                     url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",request.URL, @"&mobile_sdk=true&ref=ios_sdk"]];
                 }
                 
+                
                 NSURLRequest* request = [NSURLRequest requestWithURL:url];
                 [self.iframeView loadRequest:request];
                 
@@ -316,7 +318,7 @@
         frame = CGRectMake(0, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
     } else {
         navBarHeight = 44.0;
-        frame = CGRectMake(0, 44.0, self.frame.size.width, self.frame.size.height);
+        frame = CGRectMake(0, 44.0, self.frame.size.width, self.frame.size.height - navBarHeight);
     }
     
     self.navBar.frame = CGRectMake(0, 0, self.frame.size.width, navBarHeight);
