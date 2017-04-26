@@ -44,6 +44,14 @@
         }
     }
     
+    if ([manager programId]) {
+        pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[a-zA-Z0-9]*$"];
+        
+        if ([pred evaluateWithObject:[manager programId]]) {
+            url = [url stringByAppendingFormat:@"%@%@", @"&program=", [manager programId]];
+        }
+    }
+    
     // inject custom vars into url
     NSMutableDictionary *customVars = [manager getCustomVars];
     int counter = 1;

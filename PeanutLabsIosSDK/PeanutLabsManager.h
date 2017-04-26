@@ -27,6 +27,7 @@
 @property NSString *dob;
 @property NSString *sex;
 @property NSString *publisherName;
+@property NSString *programId;
 
 + (PeanutLabsManager*)getInstance;
 

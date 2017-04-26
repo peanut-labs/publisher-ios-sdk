@@ -16,6 +16,9 @@ All of this and much more is configured  and monitored through our Publisher Das
 Check out <a href="http://peanut-labs.github.io/publisher-doc/" target="_blank">our integration guide</a> for step by step instructions on getting up and running with our Reward Center within your iOS application.
 
 #Changelog
+v0.6
+- Add program id support into ios SDK
+
 v0.5
 - Updated iOS SDK bar behavior
   1. Hide sdk bar for profiler modal
@@ -67,4 +70,9 @@ First parameter should be var_key and second parameter should be var_val
 [plManager addCustomParameter:@"firstName" value:@"Bilguun"];
 [plManager addCustomParameter:@"lastName" value:@"Oyunchimeg"];
 
+```
+
+``` Objective-c
+Setting program id // your program id name
+[plManager setProgramId: @"example_program_id"];
 ```
