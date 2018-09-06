@@ -225,7 +225,11 @@
     NSArray *fragments = [NSArray arrayWithObjects:@"offer", @"survey", @"open", nil];
 
     if ([request.URL.host isEqualToString:@"www.peanutlabs.com"] || [request.URL.host isEqualToString:@"peanutlabs.com"]) {
-        if ([fragments containsObject:[request.URL fragment]]) {
+        if ([[request.URL fragment] isEqualToString:@"open"]){
+            fragment = [request.URL fragment] ;
+            [self updateNavBarHeight:NO];
+            return NO;
+        } else if ([fragments containsObject:[request.URL fragment]]) {
 
             fragment = [request.URL fragment] ;
             [self updateNavBarHeight:YES];
