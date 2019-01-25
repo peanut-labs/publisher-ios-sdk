@@ -14,10 +14,15 @@
 
 @implementation PlRewardsCenterViewController
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)loadView {
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     
-    self.plWebView = [[PlRewardsCenterView alloc] initWithFrame:CGRectZero];
+    PlRewardsCenterView *plWebView = [[PlRewardsCenterView alloc] initWithFrame:CGRectZero];
+    self.plWebView = plWebView;
     
     PeanutLabsManager *manager = [PeanutLabsManager getInstance];
     
@@ -80,7 +85,6 @@
     self.plWebView.delegate = self;
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver: self
@@ -89,8 +93,7 @@
            object: nil];
 }
 
-- (void) orientationDidChange: (NSNotification *) note
-{
+- (void) orientationDidChange: (NSNotification *) note {
     [self.plWebView resizeRewardsCenterView];
 }
 
@@ -98,17 +101,14 @@
     [super didReceiveMemoryWarning];
 }
 
-
 - (BOOL)shouldAutorotate {
     return YES;
 }
-
 
 - (void)PlRewardsCenter:(PlRewardsCenterView *)plRewardsCenter donePushed:(id)sender {
     [self.delegate closeRewardsCenter];
     [self dismissViewControllerAnimated:NO completion:nil];
 }
-
 
 /*!
  @to-do: Make it configurable
@@ -117,7 +117,7 @@
     return YES;
 }
 
--(NSUInteger)supportedInterfaceOrientations {
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskAll;
 }
 
