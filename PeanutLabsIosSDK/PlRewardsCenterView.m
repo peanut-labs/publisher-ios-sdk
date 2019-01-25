@@ -13,6 +13,10 @@
     NSString *fragment;
 }
 
+- (void)dealloc {
+    self.iframeView.delegate = nil;
+}
+
 - (void)resizeRewardsCenterView {
     CGRect oldFrame;
     CGRect newFrame;
@@ -22,7 +26,7 @@
     CGFloat width = screenRect.size.width;
     
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    if (SYSTEM_VERSION_LESS_THAN(@"8.0") && UIDeviceOrientationIsLandscape(orientation)) {
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0") && UIInterfaceOrientationIsLandscape(orientation)) {
         CGFloat t = width;
         width = height;
         height = t;
@@ -61,7 +65,7 @@
         CGFloat width = screenRect.size.width;
         
         UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-        if (SYSTEM_VERSION_LESS_THAN(@"8.0") && UIDeviceOrientationIsLandscape(orientation)) {
+        if (SYSTEM_VERSION_LESS_THAN(@"8.0") && UIInterfaceOrientationIsLandscape(orientation)) {
             CGFloat t = width;
             width = height;
             height = t;
@@ -109,13 +113,14 @@
     @return UIWebView
  */
 - (UIWebView *)buildIframeWebView:(float)y width:(float)width height:(float)height {
-    self.iframeView = [[UIWebView alloc] initWithFrame:CGRectMake(0, y, width, height - y)];
-    self.iframeView.userInteractionEnabled = YES;
-    self.iframeView.delegate = self;
+    UIWebView *iframeView = [[UIWebView alloc] initWithFrame:CGRectMake(0, y, width, height - y)];
+    iframeView.userInteractionEnabled = YES;
+    iframeView.delegate = self;
     
-    [[self.iframeView scrollView] setBounces:YES];
-    [self.iframeView setScalesPageToFit:YES];
+    [[iframeView scrollView] setBounces:YES];
+    [iframeView setScalesPageToFit:YES];
     
+    self.iframeView = iframeView;
     return self.iframeView;
 }
 
