@@ -12,6 +12,7 @@
 
 @protocol PlRewardsCenterViewControllerDelegate
 
+@required
 - (void)closeRewardsCenter;
 
 @end
@@ -19,9 +20,8 @@
 
 @interface PlRewardsCenterViewController : UIViewController <PlRewardsCenterDelegate>
 
-@property (strong, nonatomic) IBOutlet PlRewardsCenterView *plWebView;
-
-@property (strong, nonatomic) id<PlRewardsCenterViewControllerDelegate> delegate;
+@property (weak, nonatomic, nullable) IBOutlet PlRewardsCenterView *plWebView;
+@property (weak, nonatomic, nullable) id<PlRewardsCenterViewControllerDelegate> delegate;
 
 
 @end
