@@ -6,38 +6,32 @@
 //
 
 #import "PeanutLabsManager.h"
+#import "PlUtils.h"
 #import "PlRewardsCenterViewController.h"
 #import <CommonCrypto/CommonDigest.h>
 
+@interface PeanutLabsManager()
+@property (nonatomic, strong, nonnull) NSMutableDictionary *customVars;
+@end
 
 @implementation PeanutLabsManager
 
-static PeanutLabsManager *_plManagerInstance;
-NSMutableDictionary *_customVars;
-
 #pragma mark - getInstance
 + (PeanutLabsManager *)getInstance {
-    if (!_plManagerInstance) {
-        _plManagerInstance = [[PeanutLabsManager alloc] init];
-        _customVars = [[NSMutableDictionary alloc] init];
-    }
+    static PeanutLabsManager *_plManagerInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _plManagerInstance = [[self alloc] init];
+    });
     return _plManagerInstance;
 }
 
-
-
-- (NSString *) md5:(NSString *) s {
-    const char *cStr = [s UTF8String];
-    unsigned char res[CC_MD5_DIGEST_LENGTH];
-    CC_MD5(cStr, (CC_LONG)strlen(cStr), res);
-    NSMutableString *result = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
-    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; ++i) {
-        [result appendFormat:@"%02x", res[i]];
+- (instancetype)init {
+    if (self = [super init]) {
+        self.customVars = [NSMutableDictionary new];
     }
-    return [NSString stringWithString:result];
+    return self;
 }
-
-
 
 /*
  IF you're using the generation client side, you must use transaction sec key to validate reward callbacks since app key is exposed
@@ -47,7 +41,8 @@ NSMutableDictionary *_customVars;
         [NSException raise:@"Invalid End User Id" format:@"The property endUserId must be set to generate full user id."];
     }
     
-    NSString *hash = [self md5:[[NSString alloc] initWithFormat:@"%@%d%@", self.endUserId, self.appId, self.appKey]];
+    NSString *inputString = [[NSString alloc] initWithFormat:@"%@%d%@", self.endUserId, self.appId, self.appKey];
+    NSString *hash = [PlUtils md5:inputString];
     NSString *userGo = [hash substringWithRange:NSMakeRange(0, 10)];
     return [NSString stringWithFormat:@"%@-%d-%@", self.endUserId, self.appId, userGo];
 }
@@ -68,20 +63,16 @@ NSMutableDictionary *_customVars;
     }
     rewardsCenter.delegate = self;
     
-    if (self.delegate) { //make sure its implemented
-        if ([(NSObject *)self.delegate respondsToSelector:@selector(peanutLabsManager:rewardsCenterDidOpen:)]) {
-            [self.delegate peanutLabsManager:(PeanutLabsManager *)self rewardsCenterDidOpen:self.userId];
-        }
+    if (_delegate) {
+        [_delegate peanutLabsManager:self rewardsCenterDidOpen:_userId];
     }
 }
 
 - (void)closeRewardsCenter {
-    if (self.delegate) {
-        if ([(NSObject *)self.delegate respondsToSelector:@selector(peanutLabsManager:rewardsCenterDidClose:)]) {
-            [self.delegate peanutLabsManager:(PeanutLabsManager *)self rewardsCenterDidClose:self.userId];
-        }
+    if (_delegate) {
+        [_delegate peanutLabsManager:self rewardsCenterDidClose:_userId];
     }
-    self.userId = nil;
+    _userId = nil;
 }
 
 - (void)addCustomParameter: (NSString *)key value:(NSString *) value {
@@ -93,7 +84,7 @@ NSMutableDictionary *_customVars;
 }
 
 - (void) clearCustomParameters {
-    _customVars = [[NSMutableDictionary alloc] init];
+    [_customVars removeAllObjects];
 }
 
 @end

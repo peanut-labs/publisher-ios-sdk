@@ -26,4 +26,6 @@
 
 @interface PlUtils : NSObject
 
++ (NSString * _Nonnull) md5:(NSString * _Nonnull) s;
+
 @end
