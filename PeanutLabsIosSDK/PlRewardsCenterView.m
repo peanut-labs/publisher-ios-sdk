@@ -8,6 +8,11 @@
 #import "PlRewardsCenterView.h"
 #import "PlUtils.h"
 
+@interface PlRewardsCenterView()
+
+@property (nonatomic, strong, nonnull) NSArray* fragments;
+
+@end
 
 @implementation PlRewardsCenterView  {
     NSString *fragment;
@@ -15,6 +20,13 @@
 
 - (void)dealloc {
     self.iframeView.delegate = nil;
+}
+
+- (NSArray *)fragments {
+    if (_fragments == nil) {
+        _fragments = [NSArray arrayWithObjects:@"offer", @"survey", @"open", nil];
+    }
+    return _fragments;
 }
 
 - (void)resizeRewardsCenterView {
@@ -227,10 +239,8 @@
 #pragma mark - Delegate Methods
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
-    NSArray *fragments = [NSArray arrayWithObjects:@"offer", @"survey", @"open", nil];
-
     if ([request.URL.host isEqualToString:@"www.peanutlabs.com"] || [request.URL.host isEqualToString:@"peanutlabs.com"]) {
-        if ([fragments containsObject:[request.URL fragment]]) {
+        if ([self.fragments containsObject:[request.URL fragment]]) {
 
             fragment = [request.URL fragment] ;
             [self updateNavBarHeight:YES];
