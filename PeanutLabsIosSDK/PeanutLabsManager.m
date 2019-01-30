@@ -47,6 +47,64 @@
     return [NSString stringWithFormat:@"%@-%d-%@", self.endUserId, self.appId, userGo];
 }
 
+- (NSString *)generateWelcomeUrl {
+    
+    NSString *userId = [_userId stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+    NSString *url = [[NSString alloc] initWithFormat:@"%@%@%@", @"http://www.peanutlabs.com/userGreeting.php?userId=", userId, @"&mobile_sdk=true&ref=ios_sdk"];
+    NSPredicate *pred = nil;
+    
+    // injecting dob into url
+    if (_dob) {
+        
+        pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[0-9]{2}-[0-9]{2}-[0-9]{4}"];
+        
+        if ([pred evaluateWithObject:_dob]) {
+            url = [url stringByAppendingFormat:@"%@%@",  @"&dob=", _dob];
+        }
+    }
+    
+    // injecting sex into url
+    if (_sex) {
+        pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[1-2]$"];
+        
+        if ([pred evaluateWithObject:_sex]) {
+            url = [url stringByAppendingFormat:@"%@%@", @"&sex=", _sex];
+        }
+    }
+    
+    if (_programId) {
+        pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[a-zA-Z0-9]*$"];
+        
+        if ([pred evaluateWithObject:_programId]) {
+            url = [url stringByAppendingFormat:@"%@%@", @"&program=", _programId];
+        }
+    }
+    
+    // inject custom vars into url
+    NSMutableDictionary *customVars = [self getCustomVars];
+    int counter = 1;
+    
+    for (NSString *key in customVars){
+        
+        pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[a-zA-Z0-9]*$"];
+        
+        if ([pred evaluateWithObject:key] && [pred evaluateWithObject:[customVars objectForKey:key]]) {
+            url = [url stringByAppendingFormat:@"%@%d%@%@", @"&var_key_", counter, @"=", key];
+            url = [url stringByAppendingFormat:@"%@%d%@%@", @"&var_val_", counter, @"=", [customVars objectForKey:key]];
+        }
+        counter++;
+    }
+    
+    // injecting locale into url
+    NSLocale *locale = [NSLocale currentLocale];
+    NSString *cc = [locale objectForKey:NSLocaleLanguageCode];
+    
+    if (cc) {
+        url = [url stringByAppendingFormat:@"%@%@", @"&zl=", cc];
+    }
+    
+    return url;
+}
 
 - (void)openRewardsCenter { 
     if (self.userId == nil) {

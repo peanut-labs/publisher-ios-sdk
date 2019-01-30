@@ -34,6 +34,7 @@
 
 - (void)openRewardsCenter;
 - (NSString * _Nonnull)generateUserId;
+- (NSString * _Nonnull)generateWelcomeUrl;
 - (void)addCustomParameter: (NSString * _Nonnull)key value:(NSString * _Nonnull) value;
 - (NSMutableDictionary * _Nonnull)getCustomVars;
 - (void) clearCustomParameters;

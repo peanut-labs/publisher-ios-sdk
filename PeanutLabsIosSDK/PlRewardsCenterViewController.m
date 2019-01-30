@@ -25,62 +25,7 @@
     self.plWebView = plWebView;
     
     PeanutLabsManager *manager = [PeanutLabsManager getInstance];
-    
-    NSString *userId = [[manager userId] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
-    NSString *url = [[NSString alloc] initWithFormat:@"%@%@%@", @"http://www.peanutlabs.com/userGreeting.php?userId=", userId, @"&mobile_sdk=true&ref=ios_sdk"];
-    NSPredicate *pred = nil;
-    
-    // injecting dob into url
-    if ([manager dob]) {
-        
-        pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[0-9]{2}-[0-9]{2}-[0-9]{4}"];
-        
-        if ([pred evaluateWithObject:[manager dob]]) {
-            url = [url stringByAppendingFormat:@"%@%@",  @"&dob=", [manager dob]];
-        }
-    }
-    
-    // injecting sex into url
-    if ([manager sex]) {
-        pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[1-2]$"];
-        
-        if ([pred evaluateWithObject:[manager sex]]) {
-            url = [url stringByAppendingFormat:@"%@%@", @"&sex=", [manager sex]];
-        }
-    }
-    
-    if ([manager programId]) {
-        pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[a-zA-Z0-9]*$"];
-        
-        if ([pred evaluateWithObject:[manager programId]]) {
-            url = [url stringByAppendingFormat:@"%@%@", @"&program=", [manager programId]];
-        }
-    }
-    
-    // inject custom vars into url
-    NSMutableDictionary *customVars = [manager getCustomVars];
-    int counter = 1;
-    
-    for (NSString *key in customVars){
-        
-        pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", @"^[a-zA-Z0-9]*$"];
-        
-        if ([pred evaluateWithObject:key] && [pred evaluateWithObject:[customVars objectForKey:key]]) {
-            url = [url stringByAppendingFormat:@"%@%d%@%@", @"&var_key_", counter, @"=", key];
-            url = [url stringByAppendingFormat:@"%@%d%@%@", @"&var_val_", counter, @"=", [customVars objectForKey:key]];
-        }
-        counter++;
-    }
-    
-    // injecting locale into url
-    NSLocale *locale = [NSLocale currentLocale];
-    NSString *cc = [locale objectForKey:NSLocaleLanguageCode];
-    
-    if (cc) {
-        url = [url stringByAppendingFormat:@"%@%@", @"&zl=", cc];
-    }
-    
-    [self.plWebView setBaseUrl:url];
+    [self.plWebView setBaseUrl:[manager generateWelcomeUrl]];
     self.view = self.plWebView;
     self.plWebView.delegate = self;
 }
