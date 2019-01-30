@@ -19,7 +19,9 @@
 }
 
 - (void)dealloc {
-    self.iframeView.delegate = nil;
+    if (_iframeView != nil) {
+        _iframeView.delegate = nil;
+    }
 }
 
 - (NSArray *)fragments {
