@@ -8,9 +8,27 @@
 #import "PlRewardsCenterView.h"
 #import "PlUtils.h"
 
+@interface PlRewardsCenterView()
+
+@property (nonatomic, strong, nonnull) NSArray* fragments;
+
+@end
 
 @implementation PlRewardsCenterView  {
     NSString *fragment;
+}
+
+- (void)dealloc {
+    if (_iframeView != nil) {
+        _iframeView.delegate = nil;
+    }
+}
+
+- (NSArray *)fragments {
+    if (_fragments == nil) {
+        _fragments = [NSArray arrayWithObjects:@"offer", @"survey", @"open", nil];
+    }
+    return _fragments;
 }
 
 - (void)resizeRewardsCenterView {
@@ -22,7 +40,7 @@
     CGFloat width = screenRect.size.width;
     
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    if (SYSTEM_VERSION_LESS_THAN(@"8.0") && UIDeviceOrientationIsLandscape(orientation)) {
+    if (SYSTEM_VERSION_LESS_THAN(@"8.0") && UIInterfaceOrientationIsLandscape(orientation)) {
         CGFloat t = width;
         width = height;
         height = t;
@@ -61,7 +79,7 @@
         CGFloat width = screenRect.size.width;
         
         UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-        if (SYSTEM_VERSION_LESS_THAN(@"8.0") && UIDeviceOrientationIsLandscape(orientation)) {
+        if (SYSTEM_VERSION_LESS_THAN(@"8.0") && UIInterfaceOrientationIsLandscape(orientation)) {
             CGFloat t = width;
             width = height;
             height = t;
@@ -109,13 +127,14 @@
     @return UIWebView
  */
 - (UIWebView *)buildIframeWebView:(float)y width:(float)width height:(float)height {
-    self.iframeView = [[UIWebView alloc] initWithFrame:CGRectMake(0, y, width, height - y)];
-    self.iframeView.userInteractionEnabled = YES;
-    self.iframeView.delegate = self;
+    UIWebView *iframeView = [[UIWebView alloc] initWithFrame:CGRectMake(0, y, width, height - y)];
+    iframeView.userInteractionEnabled = YES;
+    iframeView.delegate = self;
     
-    [[self.iframeView scrollView] setBounces:YES];
-    [self.iframeView setScalesPageToFit:YES];
+    [[iframeView scrollView] setBounces:YES];
+    [iframeView setScalesPageToFit:YES];
     
+    self.iframeView = iframeView;
     return self.iframeView;
 }
 
@@ -222,10 +241,8 @@
 #pragma mark - Delegate Methods
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
-    NSArray *fragments = [NSArray arrayWithObjects:@"offer", @"survey", @"open", nil];
-
     if ([request.URL.host isEqualToString:@"www.peanutlabs.com"] || [request.URL.host isEqualToString:@"peanutlabs.com"]) {
-        if ([fragments containsObject:[request.URL fragment]]) {
+        if ([self.fragments containsObject:[request.URL fragment]]) {
 
             fragment = [request.URL fragment] ;
             [self updateNavBarHeight:YES];

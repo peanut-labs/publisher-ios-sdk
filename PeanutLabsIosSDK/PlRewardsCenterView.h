@@ -11,7 +11,7 @@
 
 @protocol PlRewardsCenterDelegate<NSObject>
 
-- (void)PlRewardsCenter:(PlRewardsCenterView *)plRewardsCenter donePushed:(id)sender;
+- (void)PlRewardsCenter:(PlRewardsCenterView * _Nonnull)plRewardsCenter donePushed:(id _Nonnull)sender;
 
 @end
 
@@ -19,24 +19,24 @@
 
 @property NSString *baseUrl;
 
-@property (strong, nonatomic) IBOutlet UIView *containerView;
-@property (strong, nonatomic) IBOutlet UIToolbar *navBar;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *doneButton;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *arrowButton;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *rewardsCenterButton;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *flex;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *fixed;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *toolbarTitle;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *backButton;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *forwardButton;
-@property (strong, nonatomic) IBOutlet UILabel *toolbarTitleLabel;
-@property (strong, nonatomic) IBOutlet UIWebView *iframeView;
-@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (strong, nonatomic) IBOutlet UIView *overlay;
+@property (strong, nonatomic, nullable) IBOutlet UIView *containerView;
+@property (strong, nonatomic, nullable) IBOutlet UIToolbar *navBar;
+@property (strong, nonatomic, nullable) IBOutlet UIBarButtonItem *doneButton;
+@property (strong, nonatomic, nullable) IBOutlet UIBarButtonItem *arrowButton;
+@property (strong, nonatomic, nullable) IBOutlet UIBarButtonItem *rewardsCenterButton;
+@property (strong, nonatomic, nullable) IBOutlet UIBarButtonItem *flex;
+@property (strong, nonatomic, nullable) IBOutlet UIBarButtonItem *fixed;
+@property (strong, nonatomic, nullable) IBOutlet UIBarButtonItem *toolbarTitle;
+@property (strong, nonatomic, nullable) IBOutlet UIBarButtonItem *backButton;
+@property (strong, nonatomic, nullable) IBOutlet UIBarButtonItem *forwardButton;
+@property (strong, nonatomic, nullable) IBOutlet UILabel *toolbarTitleLabel;
+@property (weak, nonatomic, nullable) IBOutlet UIWebView *iframeView;
+@property (strong, nonatomic, nullable) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (strong, nonatomic, nullable) IBOutlet UIView *overlay;
 
-@property (strong, nonatomic) id<PlRewardsCenterDelegate> delegate;
+@property (weak, nonatomic, nullable) id<PlRewardsCenterDelegate> delegate;
 
-- (UIToolbar *)buildNavBarWithY:(float)y width:(float)width height:(float)height;
+- (UIToolbar * _Nonnull)buildNavBarWithY:(float)y width:(float)width height:(float)height;
 - (void)setupNavBarButtons;
 - (void)resizeRewardsCenterView;
 
